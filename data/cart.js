@@ -72,3 +72,11 @@ export function loadCart(fun) {
   xhr.open('GET', 'https://supersimplebackend.dev/cart');
   xhr.send();
 }
+
+export function calculateCartQuantity(){
+  let cartQuantity = 0;
+  cart.forEach((cartItem)=>{
+    cartQuantity += cartItem.quantity;
+  });
+  return cartQuantity;
+}

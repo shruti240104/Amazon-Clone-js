@@ -1,9 +1,15 @@
 import { renderOrderSummary } from './checkout/orderSummary.js';
 import { renderpaymentSummary } from './checkout/paymentSummary.js';
 import { loadProductsFetch } from '../data/products.js';
-import { loadCart } from '../data/cart.js';
+import { loadCart , cart, calculateCartQuantity} from '../data/cart.js';
 //import '../data/cart-class.js';
 //import '../data/backend-practice.js'
+
+export function updateCartQuantity(){
+  let cartQuantity = calculateCartQuantity();
+
+  document.querySelector('.js-return-to-home-link').innerHTML=`${cartQuantity} items`;
+}
 
 async function loadPage() {
   try {
@@ -24,6 +30,7 @@ async function loadPage() {
 
   renderOrderSummary();
   renderpaymentSummary();
+  updateCartQuantity();
 }
 loadPage();
 

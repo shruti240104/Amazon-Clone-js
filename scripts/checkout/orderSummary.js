@@ -1,17 +1,17 @@
 import { cart, removeFromCart, updateDeliveryOption } from '../../data/cart.js';
-import { products, getproduct} from '../../data/products.js';
+import { products, getproduct } from '../../data/products.js';
 import formatCurrency from '../utils/money.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
 import { renderpaymentSummary } from './paymentSummary.js';
-import { updateCartQuantity } from '../checkout.js';
+import { updateCartQuantity,addSaveQuantityEventListeners,addUpdateQuantityEventListeners} from '../checkout.js';
 
 export function renderOrderSummary() {
   let cartSummaryHTML = '';
 
   cart.forEach((cartItem) => {
     const productId = cartItem.productId;
-    const matchingProduct=getproduct(productId);
+    const matchingProduct = getproduct(productId);
 
     const deliveryOptionId = cartItem.deliveryOptionId;
     const deliveryOption = getDeliveryOption(deliveryOptionId);
@@ -42,8 +42,12 @@ export function renderOrderSummary() {
             <span>
               Quantity: <span class="quantity-label">${cartItem.quantity}</span>
             </span>
-            <span class="update-quantity-link link-primary">
+            <span class="update-quantity-link link-primary js-update-quantity" data-product-id="${cartItem.productId}">
               Update
+            </span>
+            <input class="quantity-input" data-product-id="${cartItem.productId}">
+            <span class="save-quantity-link link-primary js-save-quantity" data-product-id="${cartItem.productId}">
+              Save
             </span>
             <span class="delete-quantity-link link-primary js-delete-link 
             js-delete-link-${matchingProduct.id}" data-product-id="${matchingProduct.id}">
@@ -117,5 +121,7 @@ export function renderOrderSummary() {
       renderpaymentSummary();
     });
   });
+  addUpdateQuantityEventListeners();
+  addSaveQuantityEventListeners();
 }
 //renderOrderSummary();
